@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            background-color: #ffb000;
+            font-family: Arial, sans-serif;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 30px;
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.1);
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        input, select {
+            padding: 15px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 18px;
+            transition: all 0.3s ease;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: #FF4081;
+            box-shadow: 0 0 0 3px rgba(255, 64, 129, 0.2);
+        }
+
+        button {
+            padding: 20px;
+            font-size: 24px;
+            font-weight: bold;
+            background-color: #FF4081;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #E91E63;
+            transform: scale(1.05);
+        }
+
+        h4 {
+            margin-top: 30px;
+            margin-bottom: 15px;
+            color: #333;
+            font-size: 22px;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .logo {
+            width: 350px;  /* Increased from 280px */
+            height: 375px; /* Increased from 300px */
+            display: block;
+            margin: -110px auto 0; /* Adjusted top margin to compensate for increased size */
+            position: relative;
+            z-index: 1;
+            animation: bounce 2s ease-in-out infinite;
+        }
+
+        .confetti-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background-color: #f0f;
+            clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+        }
+
+        .confetti:nth-child(even) {
+            background-color: #0ff;
+        }
+
+        @keyframes fall-left {
+            0% { transform: translateY(-100px) translateX(0) rotate(0deg); }
+            100% { transform: translateY(calc(100vh + 100px)) translateX(-100px) rotate(360deg); }
+        }
+
+        @keyframes fall-right {
+            0% { transform: translateY(-100px) translateX(0) rotate(0deg); }
+            100% { transform: translateY(calc(100vh + 100px)) translateX(100px) rotate(-360deg); }
+        }
+
+        .card-container {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+            margin: 20px auto;
+            max-width: 1200px;
+        }
+
+        .wrap {
+            flex: 1;
+            min-width: 0; /* Allows flex items to shrink below their minimum content size */
+        }
+
+        /* Adjust existing .wrap styles if necessary */
+        .wrap {
+            /* ... existing styles ... */
+            width: auto; /* Remove any fixed width */
+        }
+
+        /* You might need to adjust some internal styles of the cards for better responsiveness */
+        .overlay, .text {
+            /* ... existing styles ... */
+            padding: 15px; /* Add some padding */
+        }
+
+        .text img.inset {
+            max-width: 100%;
+            height: auto;
+        }
+
+        /* Add media query for mobile responsiveness */
+        @media (max-width: 768px) {
+            .card-container {
+                flex-direction: column;
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animated-title {
+            animation: fadeInUp 1s ease-out;
+        }
+
+        @keyframes wobbly {
+            0%, 100% { transform: translateX(0) rotate(0); }
+            25% { transform: translateX(-5px) rotate(-5deg); }
+            75% { transform: translateX(5px) rotate(5deg); }
+        }
+
+        @keyframes multicolor {
+            0% { color: #ff0000; } /* Red */
+            16.6% { color: #ff9900; } /* Orange */
+            33.3% { color: #ffff00; } /* Yellow */
+            50% { color: #33cc33; } /* Green */
+            66.6% { color: #3399ff; } /* Blue */
+            83.3% { color: #9933ff; } /* Purple */
+            100% { color: #ff0000; } /* Back to Red */
+        }
+
+        .multicolor-text {
+            animation: multicolor 8s linear infinite, wobbly 2s ease-in-out infinite;
+        }
+
+        #meal-counts {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #f0f0f0;
+            border-radius: 8px;
+        }
+
+        #meal-counts h3 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        #count-list {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        #count-list li {
+            margin-bottom: 5px;
+            font-size: 16px;
+        }
+
+        .wobbly-line {
+            width: 500px;
+            height: 5px;
+            background-color: #FF4081;
+            margin: 10px auto 30px;
+            animation: wobble 3s ease-in-out infinite;
+        }
+
+        @keyframes wobble {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px) scaleX(0.9); }
+            75% { transform: translateX(10px) scaleX(1.1); }
+        }
+    </style>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="confetti-container">
+        <!-- Left side confetti -->
+        <div class="confetti" style="left: 10%; animation: fall-left 5s linear infinite;"></div>
+        <div class="confetti" style="left: 15%; animation: fall-left 7s linear infinite;"></div>
+        <div class="confetti" style="left: 20%; animation: fall-left 6s linear infinite;"></div>
+        <div class="confetti" style="left: 25%; animation: fall-left 8s linear infinite;"></div>
+        <div class="confetti" style="left: 30%; animation: fall-left 10s linear infinite;"></div>
+
+        <!-- Right side confetti -->
+        <div class="confetti" style="right: 10%; animation: fall-right 6s linear infinite;"></div>
+        <div class="confetti" style="right: 15%; animation: fall-right 8s linear infinite;"></div>
+        <div class="confetti" style="right: 20%; animation: fall-right 5s linear infinite;"></div>
+        <div class="confetti" style="right: 25%; animation: fall-right 7s linear infinite;"></div>
+        <div class="confetti" style="right: 30%; animation: fall-right 9s linear infinite;"></div>
+    </div>
+
+    <img src="3-removebg-preview.png" alt="logo" class="logo">
+
+
+    <br>
+    <h1 class="animated-title" style="text-align: center; font-size: 40px; font-weight: bold;">
+        6 TEAMS WITH<span class="multicolor-text"> EXCITING DISHES!</span>
+    </h1>
+    <div class="wobbly-line"></div>
+
+    <!-- done -->
+
+    <!-- card 1 -->
+    <div class="card-container">
+        <div class="wrap animate pop">
+            <div class="overlay">
+                <div class="overlay-content animate slide-left delay-2">
+                    <h1 class="animate slide-left pop delay-4">Team 1 <br>🍽️</h1>
+                   <!-- <p class="animate slide-left pop delay-5" style="color: white; margin-bottom: 2.5rem;">Kingdom: <em>Plantae</em></p> -->
+                </div>
+                <div class="image-content animate slide delay-5"></div>
+                <div class="dots animate">
+                    <div class="dot animate slide-up delay-6"></div>
+                    <div class="dot animate slide-up delay-7"></div>
+                    <div class="dot animate slide-up delay-8"></div>
+                </div>
+            </div>
+            <div class="text">
+                <p><img class="inset" src="./images/turkchick.jfif" alt="" /> <br> <strong>Turkish Chicken</strong> is a culinary delight that embodies the vibrant flavors of Turkey. Marinated in a fragrant blend of spices like paprika, cumin, and sumac, the     chicken is often grilled or roasted to perfection, yielding a tender, juicy interior with a smoky char. Accompanied by colorful sides such as roasted vegetables, tangy yogurt, and fluffy pilaf, each bite is a harmony of textures and tastes.</p>
+                <p><img class="inset" src="./images/fruitpizza.jfif" alt="" /> <br> <strong>Fruit Pizza</strong> is a vibrant, whimsical dessert that transforms a classic pizza into a colorful medley of fresh flavors. At its base, a soft, buttery sugar cookie crust provides a sweet foundation, baked to golden perfection. Topped with a creamy layer of sweetened cream cheese or mascarpone, it creates a luscious canvas for a rainbow of fruits.</p>
+
+            </div>
+        </div>
+
+        <!-- card 1 end -->
+
+        <!-- card 2 -->
+
+        <div class="wrap animate pop">
+            <div class="overlay">
+                <div class="overlay-content animate slide-left delay-2">
+                    <h1 class="animate slide-left pop delay-4">Team 2 <br>🍽️</h1>
+                   <!-- <p class="animate slide-left pop delay-5" style="color: white; margin-bottom: 2.5rem;">Kingdom: <em>Plantae</em></p> -->
+                </div>
+                <div class="image-content animate slide delay-5"></div>
+                <div class="dots animate">
+                    <div class="dot animate slide-up delay-6"></div>
+                    <div class="dot animate slide-up delay-7"></div>
+                    <div class="dot animate slide-up delay-8"></div>
+                </div>
+            </div>
+            <div class="text">
+                <p><img class="inset" src="./images/korean.jfif" alt="" /> <strong>Korean Fried Chicken</strong> a tantalizing dish that redefines crispy indulgence. Double-fried to achieve a perfectly crunchy exterior, each piece is golden and crackling, encasing tender, juicy meat. The signature glaze, often a sweet and spicy concoction of gochujang, garlic, and soy sauce, clings to the chicken, adding a luscious, bold flavor.</p>
+                <p><img class="inset" src="./images/sticky.jfif" alt="" /> <strong>Sticky Toffee Pudding</strong> is a British dessert that captivates with its warm, indulgent charm. At its heart, this rich sponge cake, made with finely chopped dates, is luxuriously moist and tender, infused with a deep sweetness. It’s generously drenched in a luscious toffee sauce, crafted from brown sugar, butter, and cream, which seeps into every bite.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- card 2 end -->
+
+    <!-- card 3 -->
+    <div class="card-container">
+        <div class="wrap animate pop">
+            <div class="overlay">
+                <div class="overlay-content animate slide-left delay-2">
+                    <h1 class="animate slide-left pop delay-4">Team 3 <br>🍽️</h1>
+                   <!-- <p class="animate slide-left pop delay-5" style="color: white; margin-bottom: 2.5rem;">Kingdom: <em>Plantae</em></p> -->
+                </div>
+                <div class="image-content animate slide delay-5"></div>
+                <div class="dots animate">
+                    <div class="dot animate slide-up delay-6"></div>
+                    <div class="dot animate slide-up delay-7"></div>
+                    <div class="dot animate slide-up delay-8"></div>
+                </div>
+            </div>
+            <div class="text">
+                <p><img class="inset" src="./images/cloud.jfif" alt="" /> <strong>Cloud Naan</strong> is a delightful twist on traditional Indian flatbreads, known for its pillowy softness and airy texture. Made with a unique blend of flour, yogurt, and a touch of baking powder, this naan rises beautifully, resulting in a light and fluffy dough. When cooked in a hot tandoor or on a skillet, it puffs up dramatically, creating a cloud-like appearance that’s both visually appealing and irresistibly tender.</p>
+                <p><img class="inset" src="./images/tiramisu.jfif" alt="" /> <strong>Tiramisu</strong> is an exquisite Italian dessert that elegantly layers flavors and textures. At its core, this indulgent treat features delicate ladyfingers, or savoiardi, soaked in a rich blend of espresso and coffee liqueur, infusing each bite with a robust, aromatic kick. The ladyfingers are generously enveloped in a velvety mascarpone cream, sweetened to perfection and often lightened with whipped egg whites, creating a luxurious, airy consistency.</p>
+            </div>
+        </div>
+
+        <!-- card 3 end -->
+
+        <!-- card 4 -->
+
+        <div class="wrap animate pop">
+            <div class="overlay">
+                <div class="overlay-content animate slide-left delay-2">
+                    <h1 class="animate slide-left pop delay-4">Team 4 <br>🍽️</h1>
+                   <!-- <p class="animate slide-left pop delay-5" style="color: white; margin-bottom: 2.5rem;">Kingdom: <em>Plantae</em></p> -->
+                </div>
+                <div class="image-content animate slide delay-5"></div>
+                <div class="dots animate">
+                    <div class="dot animate slide-up delay-6"></div>
+                    <div class="dot animate slide-up delay-7"></div>
+                    <div class="dot animate slide-up delay-8"></div>
+                </div>
+            </div>
+            <div class="text">
+                <p><img class="inset" src="./images/cowboy.jfif" alt="" /> <strong>Cowboy Beef Steaks</strong> are a show-stopping cut known for their impressive presentation and rich flavor. These thick, bone-in ribeye steaks are characterized by their long, frenched bone, resembling a tomahawk axe. The marbled meat is incredibly tender and juicy, delivering a robust, beefy taste that is enhanced by simple seasonings of salt and pepper. </p>
+                <p><img class="inset" src="./images/choco.jfif" alt="" /> <strong>ChocoMallow Bran Delight</strong> is a scrumptious treat that harmoniously blends textures and flavors. This indulgent dessert features a base of crunchy bran cereal, providing a satisfying bite and a hint of wholesome goodness. Layered atop is a rich, velvety chocolate ganache that melts luxuriously in your mouth, perfectly complementing the cereal’s crispness. </p>
+            </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- card 4 end -->
+
+    <!-- card 5 -->
+    <div class="card-container">
+        <div class="wrap animate pop">
+            <div class="overlay">
+                <div class="overlay-content animate slide-left delay-2">
+                    <h1 class="animate slide-left pop delay-4">Team 5 <br>🍽️</h1>
+                   <!-- <p class="animate slide-left pop delay-5" style="color: white; margin-bottom: 2.5rem;">Kingdom: <em>Plantae</em></p> -->
+                </div>
+                <div class="image-content animate slide delay-5"></div>
+                <div class="dots animate">
+                    <div class="dot animate slide-up delay-6"></div>
+                    <div class="dot animate slide-up delay-7"></div>
+                    <div class="dot animate slide-up delay-8"></div>
+                </div>
+            </div>
+            <div class="text">
+                <p><img class="inset" src="./images/shawarma.jfif" alt="" /> <strong>Shawarma</strong> is a beloved Middle Eastern street food that features marinated, spiced meat—commonly chicken, beef, or lamb—slow-cooked on a vertical rotisserie. As the outer layers crisp to perfection, the tender, juicy meat is shaved off and typically wrapped in a warm pita or flatbread, accompanied by fresh vegetables like tomatoes, cucumbers, and onions, and drizzled with tangy tahini or garlic sauce.</p>
+                <p><img class="inset" src="./images/basbusa.jfif" alt="" /> <strong>Basbusa</strong> is a delightful Middle Eastern dessert that captivates with its moist, semolina cake soaked in sweet syrup. Traditionally flavored with rose or orange blossom water, basbousa is often garnished with almond slivers or coconut flakes, adding a touch of elegance.</p>
+            </div>
+        </div>
+
+        <!-- card 5 end -->
+
+        <!-- card 6 -->
+
+        <div class="wrap animate pop">
+            <div class="overlay">
+                <div class="overlay-content animate slide-left delay-2">
+                    <h1 class="animate slide-left pop delay-4">Team 6 <br>🍽️</h1>
+                   <!-- <p class="animate slide-left pop delay-5" style="color: white; margin-bottom: 2.5rem;">Kingdom: <em>Plantae</em></p> -->
+                </div>
+                <div class="image-content animate slide delay-5"></div>
+                <div class="dots animate">
+                    <div class="dot animate slide-up delay-6"></div>
+                    <div class="dot animate slide-up delay-7"></div>
+                    <div class="dot animate slide-up delay-8"></div>
+                </div>
+            </div>
+            <div class="text">
+                <p><img class="inset" src="./images/tortilla.jfif" alt="" /> <strong>Tortilla Monster</strong>  is a fun and imaginative dish that transforms the classic tortilla into a playful culinary creation. This whimsical delight typically features a large, soft tortilla stuffed with a hearty filling of seasoned meats, beans, and vegetables, all layered with gooey cheese. As it cooks, the edges of the tortilla become crispy, giving the "monster" its quirky appearance.</p>
+                <p><img class="inset" src="./images/lotus.jfif" alt="" /> <strong>Turaabul muluk</strong> is a delightful treat that showcases the rich, caramelized flavors of Lotus Biscoff cookies. This scrumptious cake features a moist, buttery base infused with crushed Biscoff cookies, creating a subtly spiced and sweet profile. Often layered with a creamy, dreamy frosting made from whipped cream or mascarpone, the cake is generously topped with crumbled cookies, adding a satisfying crunch.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- card 6 end -->
+
+    <h1 style="text-align: center; font-size: 30px; font-weight: bold; color: white; outline: #333;">You will get a complimentary drink with your meal!</h1>
+
+    <br>
+    <div class="container">
+        <form method="post" action="" autocomplete="off" name="google-sheet" id="form">
+            <input type="text" required placeholder="Enter your name" name="name">
+            <input type="number" required placeholder="Enter your TR number" name="tr">
+            <input type="email" required placeholder="Enter your JHS Email" name="email">
+            <select required name="darajah" id="food_option">
+                <option value="" selected disabled>Select your Darajah</option>
+                <option value="option1">1</option>
+                <option value="option2">2</option>
+                <option value="option3">3</option>
+                <option value="option4">4</option>
+                <option value="option5">5</option>
+                <option value="option6">6</option>
+                <option value="option7">7</option>
+                <option value="option8">8</option>
+                <option value="option9">9</option>
+                <option value="option10">10</option>
+                <option value="option11">11</option>
+            </select>
+
+            <select required name="meal" id="meal_option">
+                <option value="" selected disabled>Select your Meal</option>
+                <option value="Turkish Chicken" data-count="0">Turkish Chicken</option>
+                <option value="Korean Fried Chicken" data-count="0">Korean Fried Chicken</option>
+                <option value="Cloud Naan" data-count="0">Cloud Naan</option>
+                <option value="Cowboy Beef Steaks" data-count="0">Cowboy Beef Steaks</option>
+                <option value="Shawarma" data-count="0">Shawarma</option>
+                <option value="Tortilla Monster" data-count="0">Tortilla Monster</option>
+            </select>
+
+            <select required name="desert" id="dessert_option">
+                <option value="" selected disabled>Select your Dessert</option>
+                <option value="Fruit Pizza" data-count="0">Fruit Pizza</option>
+                <option value="Sticky Toffee Pudding" data-count="0">Sticky Toffee Pudding</option>
+                <option value="Tiramisu" data-count="0">Tiramisu</option>
+                <option value="ChocoMallow Bran Delight" data-count="0">ChocoMallow Bran Delight</option>
+                <option value="Basbusa" data-count="0">Basbusa</option>
+                <option value="Turaabul muluk" data-count="0">Turaabul muluk</option>
+            </select>
+
+            <!-- Add this div to display the counts -->
+            <div id="meal-counts">
+                <h3>Current Meal Selections:</h3>
+                <ul id="count-list"></ul>
+            </div>
+
+            <!---
+
+            <h4>Want an Extra Dish? Buy it here! <br> <span style="color: red; font-size: 15px; font-style: italic;">(If you want no extra dish, select 'None')</span></h4>
+
+            <select required name="dish-1-extra" id="food_option">
+                <option value="" selected disabled>Select your Dish</option>
+                <option value="option1">Option 1</option>
+                <option value="option2">Option 2</option>
+                <option value="option3">Option 3</option>
+                <option value="option4">Option 4</option>
+                <option value="option5">Option 5</option>
+                <option value="option6">Option 6</option>
+                <option value="None">None</option>
+            </select>
+
+            <select required name="dish-2-extra" id="food_option">
+                <option value="" selected disabled>Select your Dish</option>
+                <option value="option1">Option 1</option>
+                <option value="option2">Option 2</option>
+                <option value="option3">Option 3</option>
+                <option value="option4">Option 4</option>
+                <option value="option5">Option 5</option>
+                <option value="option6">Option 6</option>
+                <option value="None">None</option>
+            </select>
+
+            <select required name="dish-3-extra" id="food_option">
+                <option value="" selected disabled>Select your Dish</option>
+                <option value="option1">Option 1</option>
+                <option value="option2">Option 2</option>
+                <option value="option3">Option 3</option>
+                <option value="option4">Option 4</option>
+                <option value="option5">Option 5</option>
+                <option value="option6">Option 6</option>
+                <option value="None">None</option>
+            </select>
+            ->
+
+            <!-- <input type="hidden" name="sendEmail" value="true"> -->
+            <button type="submit" name="submit" class="tada">Submit</button>
+        </form>
+        <h4 style="text-align: center; color: red; font-size: 15px; font-style: italic;">Note: Pls wait until you see the confirmation message.</h4>
+        
+        <!-- Add this new div to display user data -->
+        <div id="user-data" style="display: none;">
+            <h3>Your Submitted Data:</h3>
+            <div id="user-data-content"></div>
+            <button id="download-pdf" class="tada">Download PDF</button>
+        </div>
+    </div>
+
+    
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script>
+        const scriptURL = 'https://script.google.com/macros/s/AKfycbx7UN1mCOXFvEPQsy4U-7uTbklaN0-fxr0jNOdCPjXGkqchUAVfv85GE-KG4lo_KLQ5/exec'
+        const form = document.forms['google-sheet']
+        const mealSelect = document.getElementById('meal_option');
+        const dessertSelect = document.getElementById('dessert_option');
+        const countList = document.getElementById('count-list');
+        
+        // Function to update option counts
+        function updateOptionCounts(counts) {
+            console.log('Updating option counts:', counts);
+            if (!counts || typeof counts !== 'object') {
+                console.error('Invalid counts data received:', counts);
+                return;
+            }
+            updateSelectCounts(mealSelect, counts);
+            updateSelectCounts(dessertSelect, counts);
+            updateCountDisplay(counts);
+        }
+        
+        function updateSelectCounts(selectElement, counts) {
+            for (let option of selectElement.options) {
+                if (option.value) {
+                    option.dataset.count = counts[option.value] || 0;
+                    if (parseInt(option.dataset.count) >= 50) {
+                        option.disabled = true;
+                        option.text = option.text.replace(/ \(Full\)$/, '') + ' (Full)';
+                    } else {
+                        option.disabled = false;
+                        option.text = option.text.replace(/ \(Full\)$/, '');
+                    }
+                }
+            }
+        }
+        
+        function updateCountDisplay(counts) {
+            console.log('Updating count display');
+            countList.innerHTML = '';
+            for (let option in counts) {
+                const li = document.createElement('li');
+                li.textContent = `${option}: ${counts[option]} selections`;
+                countList.appendChild(li);
+            }
+        }
+        
+        // Function to fetch counts using JSONP
+        function fetchCounts() {
+            console.log('Fetching counts from server...');
+            const script = document.createElement('script');
+            script.src = `${scriptURL}?action=getCounts&callback=handleCounts`;
+            document.body.appendChild(script);
+        }
+
+        // Callback function for JSONP
+        window.handleCounts = function(response) {
+            console.log('Received response:', response);
+            if (response && response.counts) {
+                updateOptionCounts(response.counts);
+            } else {
+                console.error('Invalid response format:', response);
+            }
+        }
+        
+        // Fetch current counts when page loads
+        fetchCounts();
+        
+        form.addEventListener('submit', e => {
+            e.preventDefault()
+            const formData = new FormData(form);
+            
+            console.log('Submitting form...');
+            fetch(scriptURL, { method: 'POST', body: formData})
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Received response:', data);
+                    if (data.result === 'success') {
+                        alert("Your preferences have been saved, Thank you!");
+                        if (data.counts) {
+                            updateOptionCounts(data.counts);
+                        } else {
+                            console.error('No counts data in response');
+                            fetchCounts(); // Fetch counts again if not provided in response
+                        }
+                        
+                        // Display user data
+                        displayUserData(formData);
+                    } else {
+                        alert("Sorry, that option is no longer available. Please choose another.");
+                    }
+                })
+                .catch(error => {
+                    console.error('Error!', error.message);
+                    alert("An error occurred. Please try again.");
+                })
+        })
+
+        function displayUserData(formData) {
+            const userDataContent = document.getElementById('user-data-content');
+            let html = '<ul>';
+            for (let [key, value] of formData.entries()) {
+                html += `<li><strong>${key}:</strong> ${value}</li>`;
+            }
+            html += '</ul>';
+            userDataContent.innerHTML = html;
+            document.getElementById('user-data').style.display = 'block';
+        }
+
+        document.getElementById('download-pdf').addEventListener('click', function() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            const content = document.getElementById('user-data-content').innerText;
+            
+            doc.text(content, 10, 10);
+            doc.save('user-data.pdf');
+            
+            // Refresh the page after download
+            setTimeout(() => {
+                window.location.reload();
+            }, 100);
+        });
+
+        // Add this at the top of your script
+        var MAILERLITE_API_KEY = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiI0IiwianRpIjoiNDg3YWIxNWEyZDU0MWExZTdjNjYwOTE0MjFlOGQzYWI4ZGY1YTBkNGM2NzliY2QyY2UwZTBiY2I2OTFkMjAwY2E3ODZmODJjYWRjYWNmOTEiLCJpYXQiOjE3Mjc3ODYyODUuNTY4NDAxLCJuYmYiOjE3Mjc3ODYyODUuNTY4NDAzLCJleHAiOjQ4ODM0NTk4ODUuNTY0ODUsInN1YiI6IjExMzU4NDQiLCJzY29wZXMiOltdfQ.EejhNN5_MuBev90KkkZ_tevmJDQw8kCWvrFlF_OBpw_zg7Z6VW6vWHOsntM6_XXYp8FKFqpoN8bnsWKkTZScfua2chedES7kvO2fsonDKeuPBFqZy38WGtu6K0JW5lcQg3h4eat28H1RsG0XZ7FXHdtgamT6ycAnOr4SwRA6B7u1iesGZyQFYl9oYNYkjZ4V07YUPidLbMx2ywCWZ9rV64A5pc4TpGJaRUDo5Dfld0PYywtjmaTAO_BY0D3_lcZaxhpnfAXvYhKVNYK5k6XVkgm8cWU2G3jrUDmVjK-Qp4qmu54wlyZWlQFD1akwVIrkmBIrgIxom9NjH1Xwn5D5lVBRm6nAD4TfABLk5GJ9NiNMnAizq6fIHC0h2Bjoy-BPY6pB9uI13kBWgeI9htOqlDS7pe9yAKasRKh0Sciwl-qoMUwf1ez0UswENMoXCuKA3hwZGGe8nuV_Gm1XvJ4hswo7-JkpzhQ6b1TGcSqz3wFiZWwjDgA4Q4Ee3uTW7I6N5t7XbN5TIFzlICdvfs8yoSV8RvHneXADKHMv6WSrshXPajzu69p2tvK5_-CRlFtLHNuj_Jq2jUy329TEqHXSkdQYsJpuf6q4tOSZokdQSdrcDBxrf3mRCltrJsrTfBavAtVIF8DTZdwO08Tq0ghAqjBEpxBlXPyUtjJGcKg84OE';
+
+        function doPost(e) {
+          var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+          var result = {"result":"success"};
+          
+          try {
+            var rowData = [];
+            for (var field in e.parameter) {
+              rowData.push(e.parameter[field]);
+            }
+            sheet.appendRow(rowData);
+            
+            // Check if we should send an email
+            if (e.parameter.sendEmail === "true") {
+              var emailSent = sendConfirmationEmailWithMailerLite(e.parameter);
+              if (!emailSent) {
+                result.result = "error";
+                result.error = "Failed to send email";
+              }
+            }
+            
+            // Update counts and return them
+            var counts = updateCounts();
+            result.counts = counts;
+          } catch(error) {
+            result = {"result":"error", "error": error.toString()};
+          }
+          
+          return ContentService.createTextOutput(JSON.stringify(result))
+            .setMimeType(ContentService.MimeType.JSON);
+        }
+
+
+    </script>
+</body>
+</html>
